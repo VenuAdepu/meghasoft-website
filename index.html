@@ -709,50 +709,41 @@
 
     <div style="background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:var(--radius); padding:3rem;">
 
-      <!-- Formspree success message -->
-      <div data-fs-success style="display:none; margin-bottom:1.5rem; background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); border-radius:10px; padding:1.5rem; text-align:center; color:var(--cyan); font-size:0.95rem; font-weight:500;">
-        ✓ Thank you! Your message has been sent. We'll be in touch within 24 hours.
-      </div>
+      <form id="contact-fs" action="https://formspree.io/f/mjgzrbaq" method="POST">
 
-      <!-- Formspree form-level error -->
-      <div data-fs-error style="display:none; margin-bottom:1.5rem; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:10px; padding:1.25rem; text-align:center; color:#f87171; font-size:0.9rem; font-weight:500;"></div>
-
-      <form id="contact-fs">
+        <!-- Tells Formspree where to redirect after success -->
+        <input type="hidden" name="_next" id="redirect-url" value="https://meghasoftai.com/thankyou.html">
 
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem;">
           <div>
             <label class="form-label">First Name <span style="color:var(--cyan);">*</span></label>
-            <input type="text" name="first_name" class="form-input" placeholder="Enter first name" required data-fs-field>
-            <span data-fs-error="first_name" style="color:#f87171; font-size:0.8rem; margin-top:4px; display:block;"></span>
+            <input type="text" name="first_name" class="form-input" placeholder="Enter first name" required>
           </div>
           <div>
             <label class="form-label">Last Name <span style="color:var(--cyan);">*</span></label>
-            <input type="text" name="last_name" class="form-input" placeholder="Enter last name" required data-fs-field>
-            <span data-fs-error="last_name" style="color:#f87171; font-size:0.8rem; margin-top:4px; display:block;"></span>
+            <input type="text" name="last_name" id="last-name-input" class="form-input" placeholder="Enter last name" required>
           </div>
         </div>
 
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem;">
           <div>
             <label class="form-label">Email <span style="color:var(--cyan);">*</span></label>
-            <input type="email" name="email" class="form-input" placeholder="Enter email address" required data-fs-field>
-            <span data-fs-error="email" style="color:#f87171; font-size:0.8rem; margin-top:4px; display:block;"></span>
+            <input type="email" name="email" class="form-input" placeholder="Enter email address" required>
           </div>
           <div>
             <label class="form-label">Phone</label>
-            <input type="tel" name="phone" class="form-input" placeholder="Enter phone number" data-fs-field>
+            <input type="tel" name="phone" class="form-input" placeholder="Enter phone number">
           </div>
         </div>
 
         <div style="margin-bottom:1.5rem;">
           <label class="form-label">Company <span style="color:var(--cyan);">*</span></label>
-          <input type="text" name="company" class="form-input" placeholder="Enter company name" required data-fs-field>
-          <span data-fs-error="company" style="color:#f87171; font-size:0.8rem; margin-top:4px; display:block;"></span>
+          <input type="text" name="company" class="form-input" placeholder="Enter company name" required>
         </div>
 
         <div style="margin-bottom:1.5rem;">
           <label class="form-label">Service of Interest <span style="color:var(--cyan);">*</span></label>
-          <select name="service" class="form-input form-select" required data-fs-field>
+          <select name="service" class="form-input form-select" required>
             <option value="" disabled selected>Select a service</option>
             <option value="Salesforce Advisory">Salesforce Advisory</option>
             <option value="Salesforce Architecture as a Service">Salesforce Architecture as a Service</option>
@@ -768,16 +759,14 @@
             <option value="Careers">Careers</option>
             <option value="Other">Other</option>
           </select>
-          <span data-fs-error="service" style="color:#f87171; font-size:0.8rem; margin-top:4px; display:block;"></span>
         </div>
 
         <div style="margin-bottom:2rem;">
           <label class="form-label">Message <span style="color:var(--cyan);">*</span></label>
-          <textarea name="message" class="form-input" rows="5" placeholder="Tell us about your project requirements..." required data-fs-field style="resize:vertical; min-height:130px;"></textarea>
-          <span data-fs-error="message" style="color:#f87171; font-size:0.8rem; margin-top:4px; display:block;"></span>
+          <textarea name="message" class="form-input" rows="5" placeholder="Tell us about your project requirements..." required style="resize:vertical; min-height:130px;"></textarea>
         </div>
 
-        <button type="submit" data-fs-submit-btn class="btn-primary" style="width:100%; padding:1rem; font-size:1rem; display:flex; align-items:center; justify-content:center; gap:10px; border-radius:10px; opacity:1; transition: opacity 0.2s;">
+        <button type="submit" class="btn-primary" style="width:100%; padding:1rem; font-size:1rem; display:flex; align-items:center; justify-content:center; gap:10px; border-radius:10px;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
           Send Message
         </button>
@@ -841,17 +830,13 @@
   }, { threshold: 0.1 });
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-  // Formspree — disable button while submitting
-  document.getElementById('contact-fs').addEventListener('submit', function() {
-    const btn = this.querySelector('[data-fs-submit-btn]');
-    btn.style.opacity = '0.6';
-    btn.textContent = 'Sending…';
+  // Before submitting, update the _next redirect URL to include last_name as a query param
+  document.getElementById('contact-fs').addEventListener('submit', function () {
+    const lastName = document.getElementById('last-name-input').value.trim();
+    const encoded = encodeURIComponent(lastName);
+    document.getElementById('redirect-url').value =
+      'https://meghasoftai.com/thankyou.html?last_name=' + encoded;
   });
-
-  // Initialise Formspree Ajax
-  window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
-  formspree('initForm', { formElement: '#contact-fs', formId: 'mjgzrbaq' });
 </script>
-<script src="https://unpkg.com/@formspree/ajax@1" defer></script>
 </body>
 </html>
