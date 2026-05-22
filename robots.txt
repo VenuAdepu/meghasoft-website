@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Don't index the thank you or 404 pages
+Disallow: /thankyou.html
+Disallow: /404.html
+
+# Sitemap location
+Sitemap: https://meghasoftai.com/sitemap.xml
